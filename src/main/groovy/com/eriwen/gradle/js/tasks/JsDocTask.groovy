@@ -59,7 +59,7 @@ class JsDocTask extends SourceTask {
             args << '-debug'
         }
         modulePaths.each {
-            args.addAll(['-modules', new File(jsdocDir, it).absolutePath])
+            args.addAll(['-modules', new File(jsdocDir, it).toURI()])
         }
         args.add("${jsdocDir.absolutePath}${File.separator}jsdoc.js")
         args.add("--dirname=${jsdocDir.toString().replace("\\", "/")}")
