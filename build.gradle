@@ -18,7 +18,7 @@ targetCompatibility = '1.6'
 
 defaultTasks 'clean', 'build'
 
-version = '1.5.6'
+version = '1.8.0-trid'
 group = 'com.eriwen'
 ext.archivesBaseName = 'gradle-js-plugin'
 ext.isSnapshot = version.endsWith("-SNAPSHOT")
@@ -33,7 +33,7 @@ dependencies {
     compile ('com.google.javascript:closure-compiler:v20130227') {
         exclude module: "junit"
     }
-    runtime 'com.github.phasebash:jsdoc3-maven-plugin:1.0.4'
+    runtime 'com.github.phasebash:jsdoc3-maven-plugin:1.0.5'
     testCompile ('org.spockframework:spock-core:0.7-groovy-1.8') {
         exclude module: "junit-dep"
         exclude module: "groovy-all"
@@ -78,7 +78,7 @@ cobertura {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.6'
+    gradleVersion = '1.8'
 }
 
 artifacts {
