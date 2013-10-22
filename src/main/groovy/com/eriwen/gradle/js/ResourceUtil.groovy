@@ -15,6 +15,8 @@
  */
 package com.eriwen.gradle.js
 
+import java.util.zip.ZipFile
+
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.tasks.Copy
@@ -48,21 +50,7 @@ class ResourceUtil {
         return file
     }
     
-    File extractZipFile(final Project project, final File zipFile) {
-      final String extractTargetPath = zipFile.canonicalPath.substring(0, zipFile.canonicalPath.length() - 4)
-      final File zipTargetDir = new File(extractTargetPath)
-      zipTargetDir.mkdir()
-
-      Task copyTask = project.task(type: Copy) {
-        from project.zipTree(zipFile)
-        into zipTargetDir
-      }
-      
-      copyTask.execute()
-      
-      return zipTargetDir
-    }
-
+    
     /**
      * Given an existing ZipFile, unzip it in the same directory and return a reference to the unzipped directory.
      *
@@ -70,6 +58,32 @@ class ResourceUtil {
      * @return reference to the unzipped directory.
      */
     File extractZipFile(final File zipFile) {
+      final String extractTargetPath = zipFile.canonicalPath.substring(0, zipFile.canonicalPath.length() - 4)
+      final File zipTargetDir = new File(extractTargetPath)
+      zipTargetDir.mkdir()
+
+      def zip = new ZipFile(zipFile);
+      zip.entries().each {
+        //println it
+        def entryPath = "${zipTargetDir}/${it}"
+        
+        if (it.isDirectory()) {
+          new File(entryPath).mkdir()
+        } else {
+          def fos = new FileOutputStream(entryPath) 
+          fos << zip.getInputStream(it)
+          fos.close()
+        }
+      }
+      
+      return zipTargetDir
+    }
+    
+    
+    
+    
+    
+    /*File extractZipFile(final File zipFile) {
         final String extractTargetPath = zipFile.canonicalPath.substring(0, zipFile.canonicalPath.length() - 4);
         final File zipTargetDir = new File(extractTargetPath)
         zipTargetDir.mkdir()
@@ -78,5 +92,5 @@ class ResourceUtil {
         new AntBuilder().unzip(src: zipFile.canonicalPath, dest: extractTargetPath, overwrite: 'true')
 
         return zipTargetDir
-    }
+    }*/
 }

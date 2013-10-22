@@ -52,9 +52,8 @@ class JsDocTask extends SourceTask {
             inputStream.close()
         }
 
-        //final File jsdocDir = RESOURCE_UTIL.extractZipFile(zipFile)
-        final File jsdocDir = RESOURCE_UTIL.extractZipFile(project, zipFile)
-
+        final File jsdocDir = RESOURCE_UTIL.extractZipFile(zipFile)
+        
         final List<String> args = []
         if (debug) {
             args << '-debug'
