@@ -71,7 +71,9 @@ class ResourceUtil {
           new File(entryPath).mkdir()
         } else {
           def fos = new FileOutputStream(entryPath) 
-          fos << zip.getInputStream(it)
+          def is = zip.getInputStream(it);
+          fos << is
+          is.close()
           fos.close()
         }
       }
