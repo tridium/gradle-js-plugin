@@ -15,6 +15,10 @@
  */
 package com.eriwen.gradle.js
 
+import org.gradle.api.Project
+import org.gradle.api.Task
+import org.gradle.api.tasks.Copy
+
 /**
  * Operations to handle zip files and other resources on the classpath.
  *
@@ -42,6 +46,21 @@ class ResourceUtil {
             inputStream.close()
         }
         return file
+    }
+    
+    File extractZipFile(final Project project, final File zipFile) {
+      final String extractTargetPath = zipFile.canonicalPath.substring(0, zipFile.canonicalPath.length() - 4)
+      final File zipTargetDir = new File(extractTargetPath)
+      zipTargetDir.mkdir()
+
+      Task copyTask = project.task(type: Copy) {
+        from project.zipTree(zipFile)
+        into zipTargetDir
+      }
+      
+      copyTask.execute()
+      
+      return zipTargetDir
     }
 
     /**
