@@ -16,8 +16,6 @@
 package com.eriwen.gradle.js.tasks
 
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import com.eriwen.gradle.js.ResourceUtil
 import com.eriwen.gradle.js.RhinoExec
@@ -30,16 +28,12 @@ class RequireJsTask extends SourceTask {
     private static final ResourceUtil RESOURCE_UTIL = new ResourceUtil()
     private final RhinoExec rhino = new RhinoExec(project)
 
-    @OutputDirectory
-    @Optional
-    def destDir
+    @OutputFile def dest
+    @Input def ignoreExitCode = false
 
-    @OutputFile
-    @Optional
-    def dest
-
-    @Input
-    def ignoreExitCode = false
+    File getDest() {
+        project.file(dest)
+    }
 
     @Input @Optional
     String rhinoMaxHeapSize
@@ -62,17 +56,17 @@ class RequireJsTask extends SourceTask {
             args.add("${project.requirejs.buildprofile.canonicalPath}")
         }
 
-        if (destDir) {
-            args.add("dir=${ project.file(destDir).canonicalPath}")
+        def outAdded = false
+        if (!options.containsKey("out")) {
+            args.add("out=${getDest().canonicalPath}")
+            outAdded = true
         }
-        if (dest) {
-            args.add("out=${ project.file(dest).canonicalPath}")
-        }
-
         options.each() { key, value ->
-            logger.debug("${key} == ${options[value]}")
-            def keyAlreadyAdded = (key.equalsIgnoreCase("out") && dest) || (key.equalsIgnoreCase("dir") && destDir)
-            if (!keyAlreadyAdded) {
+            logger.debug("${key} == ${value}")
+            if (key.equalsIgnoreCase("out") & !outAdded) {
+                args.add("out=${getDest().canonicalPath}")
+                outAdded = true
+            } else {
                 args.add("${key}=${value}")
             }
         }
