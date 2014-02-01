@@ -19,6 +19,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import com.eriwen.gradle.js.ResourceUtil
 import com.eriwen.gradle.js.RhinoExec
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.OutputFile
 
