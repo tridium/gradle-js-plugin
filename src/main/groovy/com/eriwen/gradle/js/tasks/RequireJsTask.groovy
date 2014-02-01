@@ -38,6 +38,9 @@ class RequireJsTask extends SourceTask {
 
     @Input @Optional
     String rhinoMaxHeapSize
+    
+    @Input @Optional
+    List<String> rhinoJvmArgs
 
     @TaskAction
     def run() {
@@ -72,6 +75,6 @@ class RequireJsTask extends SourceTask {
             }
         }
 
-        rhino.execute(args, [ignoreExitCode: ignoreExitCode, workingDir: project.projectDir.canonicalPath, maxHeapSize: rhinoMaxHeapSize])
+        rhino.execute(args, [ignoreExitCode: ignoreExitCode, workingDir: project.projectDir.canonicalPath, maxHeapSize: rhinoMaxHeapSize, jvmArgs: rhinoJvmArgs])
     }
 }

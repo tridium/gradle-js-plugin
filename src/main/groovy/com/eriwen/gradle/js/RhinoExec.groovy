@@ -20,6 +20,7 @@ class RhinoExec {
         final def configuration = options.get('configuration', project.configurations.rhino)
         final OutputStream out = options.get('out', System.out) as OutputStream
         final String maxHeapSizeVal =  options.get('maxHeapSize', null)
+        final List<String> jvmArgsVal = options.get('jvmArgs', null)
 
         def execOptions = {
             main = RHINO_MAIN_CLASS
@@ -30,6 +31,9 @@ class RhinoExec {
             standardOutput = out
             if (maxHeapSizeVal) {
                 maxHeapSize = maxHeapSizeVal
+            }
+            if (jvmArgsVal) {
+                jvmArgs = jvmArgsVal
             }
         }
 
